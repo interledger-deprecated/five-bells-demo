@@ -15,7 +15,7 @@
     "node": ">=4.0.0"
   },
   "dependencies": {
-    "@ripple/five-bells-ledger": "^3.1.1",
+    "@ripple/five-bells-ledger": "^3.1.2",
     "@ripple/five-bells-sender": "^1.0.0",
     "@ripple/five-bells-trader": "0.1.1",
     "@ripple/five-bells-visualization": "^1.0.0",
