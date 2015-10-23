@@ -23,7 +23,7 @@ cd five-bells-demo
 ### Step 2: Install dependencies
 
 ``` sh
-npm install
+npm install --only=prod --no-optional
 ```
 
 ### Step 3: Run it!
