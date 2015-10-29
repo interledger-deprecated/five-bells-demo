@@ -2,6 +2,7 @@
 
 const app = require('app')
 const BrowserWindow = require('browser-window')
+const demo = require('./src/services/demo')
 
 require('./server')
 
@@ -19,4 +20,13 @@ app.on('ready', () => {
 
   // Load the index.html for the demo
   mainWindow.loadUrl('http://localhost:3000/public/index.html')
+
+  demo.processStdout = (log, unit) => {
+    return function (line, enc, callback) {
+      mainWindow.webContents.send('log', unit.alias, line.toString())
+      callback(null, line + '\n')
+    }
+  }
+
+  demo.start()
 })

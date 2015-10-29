@@ -61,7 +61,8 @@ class Demo {
       cwd: './node_modules/five-bells-ledger',
       cmd: 'npm start -- --color',
       waitFor: 'listening',
-      alias: 'ledger-' + name
+      alias: 'ledger-' + name,
+      processStdout: this.processStdout
     }
   }
 
@@ -101,7 +102,8 @@ class Demo {
       },
       cwd: './node_modules/five-bells-trader',
       cmd: 'npm start -- --color',
-      alias: 'trader-' + name
+      alias: 'trader-' + name,
+      processStdout: this.processStdout
     }
   }
 
@@ -116,7 +118,8 @@ class Demo {
       },
       cwd: './node_modules/five-bells-visualization',
       cmd: 'npm start -- --color',
-      alias: 'visualization'
+      alias: 'visualization',
+      processStdout: this.processStdout
     }
   }
 

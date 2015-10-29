@@ -1,18 +1,31 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
+import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
 import { Tab, Tabs } from 'material-ui/lib/tabs'
 import Log from 'ui/components/Log.jsx'
+import Visualization from 'ui/components/Visualization.jsx'
+import * as Actions from 'ui/actions.js'
 
-function mapStateToProps (state) {
-  return {}
+function select (state) {
+  return {
+    log: state.log
+  }
 }
+
 function mapDispatchToProps (dispatch) {
-  return {}
+  return {
+    actions: bindActionCreators(Actions, dispatch)
+  }
 }
 
-@connect(mapStateToProps, mapDispatchToProps)
+@connect(select, mapDispatchToProps)
 export default class App extends React.Component {
+  static propTypes = {
+    log: PropTypes.array.isRequired,
+    actions: PropTypes.object.isRequired
+  }
+
   render () {
     const styles = {
       container: {
@@ -36,8 +49,8 @@ export default class App extends React.Component {
 
     return <div style={styles.container}>
       <Tabs style={styles.tabs} contentContainerStyle={styles.tabContent}>
-        <Tab label='Visualization'>456</Tab>
-        <Tab label='Log'><Log/></Tab>
+        <Tab label='Log'><Log log={this.props.log} actions={this.props.actions}/></Tab>
+        <Tab label='Visualization'><Visualization/></Tab>
       </Tabs>
     </div>
   }
