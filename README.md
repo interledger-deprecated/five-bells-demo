@@ -34,6 +34,13 @@ npm start
 
 Visit [`http://localhost:5001`](http://localhost:5001) to see it in action!
 
+### Configuration
+
+* `DEMO_NUM_LEDGERS` - Number of [`five-bells-ledger`](https://github.com/ripple/five-bells-ledger) processes to start
+* `DEMO_NUM_TRADERS` - Number of [`five-bells-trader`](https://github.com/ripple/five-bells-trader) processes to start
+* `DEMO_CONNECTED_CORE` - How connected the core ledgers in the generated graph should be (default: 2)
+* `DEMO_CONNECTIONS_PER_NEW_NODE` - How many connections each ledger will be added with (default: 2, must be <= `DEMO_CONNECTED_CORE`)
+
 ## Why "Five Bells"?
 
 Legend (i.e. [Wikipedia](https://en.wikipedia.org/wiki/Bankers_clearing_house)) has it that before 1770, checks/cheques were cleared by clerks running between banks exchanging checks for cash.
