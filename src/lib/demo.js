@@ -1,5 +1,6 @@
 'use strict'
 
+const path = require('path')
 const randomgraph = require('randomgraph')
 
 const traderNames = [
@@ -48,10 +49,11 @@ class Demo {
   }
 
   createLedger (name, port) {
+    const dbPath = path.resolve(__dirname, '../../data/' + name + '.sqlite')
     return {
       env: {
         PATH: process.env.PATH,
-        LEDGER_DB_URI: 'sqlite:///tmp/' + name + '.sqlite',
+        LEDGER_DB_URI: 'sqlite://' + dbPath,
         LEDGER_DB_SYNC: true,
         LEDGER_HOSTNAME: 'localhost',
         LEDGER_PORT: port
