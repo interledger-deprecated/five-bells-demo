@@ -9,7 +9,7 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "start": "node index.js"
+    "start": "rm -f data/*.sqlite ; node index.js"
   },
   "license": "MIT",
   "engines": {
