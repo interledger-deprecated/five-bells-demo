@@ -137,8 +137,8 @@ class Demo {
     const multiplexer = require('multiplexer')
     const processes = []
     const accounts = []
-    for (let i = 0; i < this.numLedgers; i++) {
-      let port = 3001 + i
+    for (let i = 1; i <= this.numLedgers; i++) {
+      let port = 3000 + i
       processes.push(this.createLedger('ledger' + i, port))
       accounts.push(this.createAccount('http://localhost:' + port, 'alice'))
       accounts.push(this.createAccount('http://localhost:' + port, 'bob'))
