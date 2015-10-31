@@ -58,7 +58,7 @@ class Demo {
         LEDGER_HOSTNAME: 'localhost',
         LEDGER_PORT: port
       },
-      cwd: './node_modules/@ripple/five-bells-ledger',
+      cwd: './node_modules/five-bells-ledger',
       cmd: 'npm start -- --color',
       waitFor: 'listening',
       alias: 'ledger-' + name
@@ -99,7 +99,7 @@ class Demo {
         TRADER_HOSTNAME: 'localhost',
         TRADER_PORT: port
       },
-      cwd: './node_modules/@ripple/five-bells-trader',
+      cwd: './node_modules/five-bells-trader',
       cmd: 'npm start -- --color',
       alias: 'trader-' + name
     }
@@ -114,7 +114,7 @@ class Demo {
         HOSTNAME: 'localhost',
         PORT: port
       },
-      cwd: './node_modules/@ripple/five-bells-visualization',
+      cwd: './node_modules/five-bells-visualization',
       cmd: 'npm start -- --color',
       alias: 'visualization'
     }

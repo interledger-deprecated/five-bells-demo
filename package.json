@@ -1,8 +1,13 @@
 {
   "name": "five-bells-demo",
   "version": "1.1.1",
-  "author": "Stefan Thomas <justmoon@members.fsf.org>",
-  "description": "Description",
+  "author": "Ripple <info@ripple.com>",
+  "description": "Demo of Five Bells payments",
+  "keywords": [
+    "interledger",
+    "five-bells",
+    "ilp"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/interledger/five-bells-demo.git"
@@ -16,10 +21,10 @@
     "node": ">=4.0.0"
   },
   "dependencies": {
-    "@ripple/five-bells-ledger": "~4.0.0",
-    "@ripple/five-bells-sender": "~2.0.1",
-    "@ripple/five-bells-trader": "~1.0.0",
-    "@ripple/five-bells-visualization": "~1.4.1",
+    "five-bells-ledger": "~5.0.0",
+    "five-bells-sender": "~3.0.0",
+    "five-bells-trader": "~1.0.1",
+    "five-bells-visualization": "~2.0.0",
     "co": "^4.6.0",
     "co-request": "^1.0.0",
     "lodash": "^3.10.1",
