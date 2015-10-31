@@ -3,7 +3,7 @@
 
 const co = require('co')
 const request = require('co-request')
-const Pathfinder = require('@ripple/five-bells-sender/node_modules/@ripple/five-bells-pathfind').Pathfinder
+const Pathfinder = require('five-bells-sender/node_modules/five-bells-pathfind').Pathfinder
 
 const pathfinder = new Pathfinder({
   crawler: {

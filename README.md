@@ -36,8 +36,8 @@ Visit [`http://localhost:5001`](http://localhost:5001) to see it in action!
 
 ### Configuration
 
-* `DEMO_NUM_LEDGERS` - Number of [`five-bells-ledger`](https://github.com/ripple/five-bells-ledger) processes to start
-* `DEMO_NUM_TRADERS` - Number of [`five-bells-trader`](https://github.com/ripple/five-bells-trader) processes to start
+* `DEMO_NUM_LEDGERS` - Number of [`five-bells-ledger`](https://github.com/interledger/five-bells-ledger) processes to start
+* `DEMO_NUM_TRADERS` - Number of [`five-bells-trader`](https://github.com/interledger/five-bells-trader) processes to start
 * `DEMO_CONNECTED_CORE` - How connected the core ledgers in the generated graph should be (default: 2)
 * `DEMO_CONNECTIONS_PER_NEW_NODE` - How many connections each ledger will be added with (default: 2, must be <= `DEMO_CONNECTED_CORE`)
 
@@ -55,8 +55,8 @@ In the early 1800s, the group of clerks outgrew their space at the Five Bells an
 
 This demo uses the following modules:
 
-* [`five-bells-ledger`](https://github.com/ripple/five-bells-ledger)
-* [`five-bells-trader`](https://github.com/ripple/five-bells-trader)
-* [`five-bells-sender`](https://github.com/ripple/five-bells-sender)
-* [`five-bells-visualization`](https://github.com/ripple/five-bells-visualization)
+* [`five-bells-ledger`](https://github.com/interledger/five-bells-ledger)
+* [`five-bells-trader`](https://github.com/interledger/five-bells-trader)
+* [`five-bells-sender`](https://github.com/interledger/five-bells-sender)
+* [`five-bells-visualization`](https://github.com/interledger/five-bells-visualization)
 
