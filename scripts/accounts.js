@@ -7,7 +7,7 @@ const Pathfinder = require('five-bells-sender/node_modules/five-bells-pathfind')
 
 const pathfinder = new Pathfinder({
   crawler: {
-    initialNodes: ['http://localhost:3001', 'http://localhost:3002']
+    initialLedgers: ['http://localhost:3001', 'http://localhost:3002']
   }
 })
 
@@ -16,10 +16,10 @@ co(function * () {
   let ledgers = yield pathfinder.getLedgers()
   console.log('Ledger\tAccount\tBalance')
   for (let ledger of ledgers) {
-    let accounts = yield request(ledger.id + '/accounts', {json: true})
+    let accounts = yield request(ledger.uri + '/accounts', {json: true})
     for (let account of accounts.body) {
       console.log(
-        getPort(ledger.id) + '\t' +
+        getPort(ledger.uri) + '\t' +
         getName(account.id) + '\t' +
         account.balance)
     }

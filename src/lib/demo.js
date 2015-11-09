@@ -20,6 +20,9 @@ class Demo {
   constructor (opts) {
     const _this = this
 
+    this.adminUser = opts.adminUser
+    this.adminPass = opts.adminPass
+
     this.numLedgers = opts.numLedgers
     this.numTraders = opts.numTraders
     this.barabasiAlbertConnectedCore = opts.barabasiAlbertConnectedCore || 2
@@ -56,7 +59,9 @@ class Demo {
         LEDGER_DB_URI: 'sqlite://' + dbPath,
         LEDGER_DB_SYNC: true,
         LEDGER_HOSTNAME: 'localhost',
-        LEDGER_PORT: port
+        LEDGER_PORT: port,
+        LEDGER_ADMIN_USER: this.adminUser,
+        LEDGER_ADMIN_PASS: this.adminPass
       },
       cwd: './node_modules/five-bells-ledger',
       cmd: 'npm start -- --color',
@@ -97,7 +102,9 @@ class Demo {
         TRADER_MAX_HOLD_TIME: 60,
         PATH: process.env.PATH,
         TRADER_HOSTNAME: 'localhost',
-        TRADER_PORT: port
+        TRADER_PORT: port,
+        TRADER_ADMIN_USER: this.adminUser,
+        TRADER_ADMIN_PASS: this.adminPass
       },
       cwd: './node_modules/five-bells-trader',
       cmd: 'npm start -- --color',
@@ -112,7 +119,9 @@ class Demo {
         CRAWLER_INITIAL_LEDGERS: ledger,
         VISUALIZATION_RECRAWL_INTERVAL: 30000,
         HOSTNAME: 'localhost',
-        PORT: port
+        PORT: port,
+        ADMIN_USER: this.adminUser,
+        ADMIN_PASS: this.adminPass
       },
       cwd: './node_modules/five-bells-visualization',
       cmd: 'npm start -- --color',
@@ -125,7 +134,9 @@ class Demo {
       env: {
         PATH: process.env.PATH,
         LEDGER: ledger,
-        USERNAME: name
+        USERNAME: name,
+        ADMIN_USER: this.adminUser,
+        ADMIN_PASS: this.adminPass
       },
       cwd: './',
       cmd: './scripts/create-account.js',

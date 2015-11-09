@@ -4,7 +4,9 @@ exports.graph = {
   numLedgers: 8,
   numTraders: 7,
   barabasiAlbertConnectedCore: 2,
-  barabasiAlbertConnectionsPerNewNode: 2
+  barabasiAlbertConnectionsPerNewNode: 2,
+  adminUser: process.env.ADMIN_USER || 'admin',
+  adminPass: process.env.ADMIN_PASS || 'admin'
 }
 
 if (process.env.DEMO_NUM_LEDGERS) {
