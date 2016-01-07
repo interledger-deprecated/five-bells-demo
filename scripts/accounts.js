@@ -16,11 +16,17 @@ co(function * () {
   let ledgers = yield pathfinder.getLedgers()
   console.log('Ledger\tAccount\tBalance')
   for (let ledger of ledgers) {
-    let accounts = yield request(ledger.uri + '/accounts', {json: true})
+    let accounts = yield request(ledger.uri + '/accounts', {
+      auth: {user: 'admin', pass: 'admin'},
+      json: true
+    })
+    if (accounts.statusCode !== 200) {
+      throw new Error('Unexpected /accounts error: ' + accounts.statusCode + ' ' + JSON.stringify(accounts.body))
+    }
     for (let account of accounts.body) {
       console.log(
         getPort(ledger.uri) + '\t' +
-        getName(account.id) + '\t' +
+        getName(account.name) + '\t' +
         account.balance)
     }
   }

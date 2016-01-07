@@ -2,7 +2,7 @@
 'use strict'
 
 const co = require('co')
-const send = require('five-bells-sender')
+const send = require('five-bells-sender').default
 const argv = process.argv.slice(2)
 
 if (argv.length !== 2) {

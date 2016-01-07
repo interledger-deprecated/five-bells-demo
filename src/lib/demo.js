@@ -3,7 +3,7 @@
 const path = require('path')
 const randomgraph = require('randomgraph')
 
-const traderNames = [
+const connectorNames = [
   'mark', 'mary', 'martin', 'millie',
   'mia', 'mike', 'mesrop', 'michelle',
   'milo', 'miles', 'michael', 'micah', 'max'
@@ -24,11 +24,11 @@ class Demo {
     this.adminPass = opts.adminPass
 
     this.numLedgers = opts.numLedgers
-    this.numTraders = opts.numTraders
+    this.numConnectors = opts.numConnectors
     this.barabasiAlbertConnectedCore = opts.barabasiAlbertConnectedCore || 2
     this.barabasiAlbertConnectionsPerNewNode = opts.barabasiAlbertConnectionsPerNewNode || 2
 
-    // Trader graph
+    // Connector graph
     // Barabási–Albert (N, m0, M)
     //
     // N .. number of nodes
@@ -38,16 +38,16 @@ class Demo {
       this.numLedgers,
       this.barabasiAlbertConnectedCore,
       this.barabasiAlbertConnectionsPerNewNode)
-    this.traderEdges = new Array(this.numTraders)
-    for (let i = 0; i < this.numTraders; i++) {
-      this.traderEdges[i] = []
+    this.connectorEdges = new Array(this.numConnectors)
+    for (let i = 0; i < this.numConnectors; i++) {
+      this.connectorEdges[i] = []
     }
     this.graph.edges.forEach(function (edge, i) {
       edge.source_currency = currencies[edge.source % currencies.length]
       edge.target_currency = currencies[edge.target % currencies.length]
       edge.source = 'http://localhost:' + (3001 + edge.source)
       edge.target = 'http://localhost:' + (3001 + edge.target)
-      _this.traderEdges[i % _this.numTraders].push(edge)
+      _this.connectorEdges[i % _this.numConnectors].push(edge)
     })
   }
 
@@ -78,7 +78,7 @@ class Demo {
     }
   }
 
-  createTrader (name, port, edges) {
+  createConnector (name, port, edges) {
     let creds = {}
     let pairs = []
     for (let edge of edges) {
@@ -96,19 +96,19 @@ class Demo {
 
     return {
       env: {
-        TRADER_CREDENTIALS: JSON.stringify(creds),
-        TRADER_DEBUG_AUTOFUND: '1',
+        CONNECTOR_CREDENTIALS: JSON.stringify(creds),
+        CONNECTOR_DEBUG_AUTOFUND: '1',
         TRADING_PAIRS: JSON.stringify(pairs),
-        TRADER_MAX_HOLD_TIME: 60,
+        CONNECTOR_MAX_HOLD_TIME: 60,
         PATH: process.env.PATH,
-        TRADER_HOSTNAME: 'localhost',
-        TRADER_PORT: port,
-        TRADER_ADMIN_USER: this.adminUser,
-        TRADER_ADMIN_PASS: this.adminPass
+        CONNECTOR_HOSTNAME: 'localhost',
+        CONNECTOR_PORT: port,
+        CONNECTOR_ADMIN_USER: this.adminUser,
+        CONNECTOR_ADMIN_PASS: this.adminPass
       },
-      cwd: './node_modules/five-bells-trader',
+      cwd: './node_modules/five-bells-connector',
       cmd: 'npm start -- --color',
-      alias: 'trader-' + name
+      alias: 'connector-' + name
     }
   }
 
@@ -155,8 +155,8 @@ class Demo {
       accounts.push(this.createAccount('http://localhost:' + port, 'bob'))
     }
 
-    for (let i = 0; i < this.numTraders; i++) {
-      processes.push(this.createTrader(traderNames[i] || 'trader' + i, 4001 + i, this.traderEdges[i]))
+    for (let i = 0; i < this.numConnectors; i++) {
+      processes.push(this.createConnector(connectorNames[i] || 'connector' + i, 4001 + i, this.connectorEdges[i]))
     }
 
     multiplexer(processes.concat([

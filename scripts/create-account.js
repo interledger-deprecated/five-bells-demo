@@ -41,7 +41,7 @@ function * createAccount (ledger, name) {
     auth: { user: adminUser, pass: adminPass },
     json: true,
     body: {
-      name: account_uri,
+      name: name,
       password: name,
       balance: '1500000'
     }

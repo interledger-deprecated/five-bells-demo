@@ -2,7 +2,7 @@
 
 exports.graph = {
   numLedgers: 8,
-  numTraders: 7,
+  numConnectors: 7,
   barabasiAlbertConnectedCore: 2,
   barabasiAlbertConnectionsPerNewNode: 2,
   adminUser: process.env.ADMIN_USER || 'admin',
@@ -13,8 +13,8 @@ if (process.env.DEMO_NUM_LEDGERS) {
   exports.graph.numLedgers = parseInt(process.env.DEMO_NUM_LEDGERS, 10)
 }
 
-if (process.env.DEMO_NUM_TRADERS) {
-  exports.graph.numTraders = parseInt(process.env.DEMO_NUM_TRADERS, 10)
+if (process.env.DEMO_NUM_CONNECTORS) {
+  exports.graph.numConnectors = parseInt(process.env.DEMO_NUM_CONNECTORS, 10)
 }
 
 // A higher number here will result in more highly connected central ledgers
