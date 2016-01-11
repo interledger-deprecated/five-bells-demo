@@ -129,6 +129,21 @@ class Demo {
     }
   }
 
+  createNotary (port) {
+    const dbPath = path.resolve(__dirname, '../../data/notary.sqlite')
+    return {
+      env: {
+        PATH: process.env.PATH,
+        NOTARY_DB_URI: 'sqlite://' + dbPath,
+        NOTARY_HOSTNAME: 'localhost',
+        NOTARY_PORT: port
+      },
+      cwd: './node_modules/five-bells-notary',
+      cmd: 'npm start -- --color',
+      alias: 'notary'
+    }
+  }
+
   createAccount (ledger, name) {
     return {
       env: {
@@ -160,6 +175,7 @@ class Demo {
     }
 
     multiplexer(processes.concat([
+      this.createNotary(6001),
       this.createVisualization(5001, 'http://localhost:3001')
     ], accounts))
   }
