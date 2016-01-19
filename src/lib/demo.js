@@ -98,7 +98,7 @@ class Demo {
       env: {
         CONNECTOR_CREDENTIALS: JSON.stringify(creds),
         CONNECTOR_DEBUG_AUTOFUND: '1',
-        TRADING_PAIRS: JSON.stringify(pairs),
+        CONNECTOR_PAIRS: JSON.stringify(pairs),
         CONNECTOR_MAX_HOLD_TIME: 60,
         PATH: process.env.PATH,
         CONNECTOR_HOSTNAME: 'localhost',
