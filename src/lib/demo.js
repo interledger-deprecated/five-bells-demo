@@ -28,6 +28,12 @@ class Demo {
     this.barabasiAlbertConnectedCore = opts.barabasiAlbertConnectedCore || 2
     this.barabasiAlbertConnectionsPerNewNode = opts.barabasiAlbertConnectionsPerNewNode || 2
 
+    if (process.env.npm_node_execpath && process.env.npm_execpath) {
+      this.npmPrefix = process.env.npm_node_execpath + ' ' + process.env.npm_execpath
+    } else {
+      this.npmPrefix = 'npm'
+    }
+
     // Connector graph
     // Barabási–Albert (N, m0, M)
     //
@@ -64,7 +70,7 @@ class Demo {
         LEDGER_ADMIN_PASS: this.adminPass
       },
       cwd: './node_modules/five-bells-ledger',
-      cmd: 'npm start -- --color',
+      cmd: this.npmPrefix + ' start -- --color',
       waitFor: 'listening',
       alias: 'ledger-' + name
     }
@@ -107,7 +113,7 @@ class Demo {
         CONNECTOR_ADMIN_PASS: this.adminPass
       },
       cwd: './node_modules/five-bells-connector',
-      cmd: 'npm start -- --color',
+      cmd: this.npmPrefix + ' start -- --color',
       alias: 'connector-' + name
     }
   }
@@ -124,7 +130,7 @@ class Demo {
         ADMIN_PASS: this.adminPass
       },
       cwd: './node_modules/five-bells-visualization',
-      cmd: 'npm start -- --color',
+      cmd: this.npmPrefix + ' start -- --color',
       alias: 'visualization'
     }
   }
@@ -139,7 +145,7 @@ class Demo {
         NOTARY_PORT: port
       },
       cwd: './node_modules/five-bells-notary',
-      cmd: 'npm start -- --color',
+      cmd: this.npmPrefix + ' start -- --color',
       alias: 'notary'
     }
   }
