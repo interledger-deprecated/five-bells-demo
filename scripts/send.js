@@ -12,14 +12,13 @@ if (argv.length !== 2 && argv.length !== 4) {
 
 co(function * () {
   yield send({
-    source_ledger: argv[0],
-    source_username: 'alice',
-    source_password: 'alice',
-    destination_ledger: argv[1],
-    destination_username: 'bob',
-    destination_amount: '1',
+    sourceAccount: argv[0] + '/accounts/alice',
+    sourceUsername: 'alice',
+    sourcePassword: 'alice',
+    destinationAccount: argv[1] + '/accounts/bob',
+    destinationAmount: '1',
     notary: argv[2],
-    notary_public_key: argv[3]
+    notaryPublicKey: argv[3]
   })
 }).catch(function (err) {
   console.error(err.stack)

@@ -21,11 +21,12 @@
     "node": ">=4.0.0"
   },
   "dependencies": {
-    "five-bells-connector": "~2.0.0",
-    "five-bells-ledger": "~5.3.0",
-    "five-bells-notary": "~2.0.0",
-    "five-bells-sender": "~3.5.0",
-    "five-bells-visualization": "~2.2.0",
+    "five-bells-connector": "~2.1.0",
+    "five-bells-ledger": "~5.3.1",
+    "five-bells-notary": "~2.0.1",
+    "five-bells-sender": "~4.0.0",
+    "five-bells-shared": "~8.10.0",
+    "five-bells-visualization": "~2.3.1",
     "co": "^4.6.0",
     "co-request": "^1.0.0",
     "lodash": "^3.10.1",
