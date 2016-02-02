@@ -3,6 +3,7 @@
 
 const co = require('co')
 const request = require('co-request')
+const hashPassword = require('five-bells-shared/utils/hashPassword')
 const ledger = process.env.LEDGER
 const username = process.env.USERNAME
 const adminUser = process.env.ADMIN_USER
@@ -25,8 +26,8 @@ co(createAccount, ledger, username)
   })
 
 function * createAccount (ledger, name) {
-  let account_uri = ledger + '/accounts/' + encodeURIComponent(name)
-  let getAccountRes = yield request({
+  const account_uri = ledger + '/accounts/' + encodeURIComponent(name)
+  const getAccountRes = yield request({
     method: 'get',
     url: account_uri,
     json: true
@@ -35,14 +36,14 @@ function * createAccount (ledger, name) {
     return
   }
 
-  let putAccountRes = yield request({
+  const putAccountRes = yield request({
     method: 'put',
     url: account_uri,
     auth: { user: adminUser, pass: adminPass },
     json: true,
     body: {
       name: name,
-      password: name,
+      password_hash: (yield hashPassword(name)),
       balance: '1500000'
     }
   })
