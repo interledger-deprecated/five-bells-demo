@@ -58,11 +58,11 @@ class Demo {
   }
 
   createLedger (name, port) {
-    const dbPath = path.resolve(__dirname, '../../data/' + name + '.sqlite')
+    const dbUri = process.env.LEDGER_DB_URI || 'sqlite://' + path.resolve(__dirname, '../../data/' + name + '.sqlite')
     return {
       env: {
         PATH: process.env.PATH,
-        LEDGER_DB_URI: 'sqlite://' + dbPath,
+        LEDGER_DB_URI: dbUri,
         LEDGER_DB_SYNC: true,
         LEDGER_HOSTNAME: 'localhost',
         LEDGER_PORT: port,
@@ -136,11 +136,11 @@ class Demo {
   }
 
   createNotary (port) {
-    const dbPath = path.resolve(__dirname, '../../data/notary.sqlite')
+    const dbUri = process.env.NOTARY_DB_URI || 'sqlite://' + path.resolve(__dirname, '../../data/notary.sqlite')
     return {
       env: {
         PATH: process.env.PATH,
-        NOTARY_DB_URI: 'sqlite://' + dbPath,
+        NOTARY_DB_URI: dbUri,
         NOTARY_HOSTNAME: 'localhost',
         NOTARY_PORT: port
       },
