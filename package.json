@@ -24,7 +24,7 @@
     "five-bells-connector": "~2.1.0",
     "five-bells-ledger": "~5.3.1",
     "five-bells-notary": "~2.0.1",
-    "five-bells-sender": "~4.0.0",
+    "five-bells-sender": "~4.1.0",
     "five-bells-shared": "~8.10.0",
     "five-bells-visualization": "~2.3.1",
     "co": "^4.6.0",
