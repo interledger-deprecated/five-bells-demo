@@ -13,7 +13,6 @@ if (argv.length !== 2 && argv.length !== 4) {
 co(function * () {
   yield send({
     sourceAccount: argv[0] + '/accounts/alice',
-    sourceUsername: 'alice',
     sourcePassword: 'alice',
     destinationAccount: argv[1] + '/accounts/bob',
     destinationAmount: '1',
