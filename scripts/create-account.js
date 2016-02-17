@@ -3,7 +3,6 @@
 
 const co = require('co')
 const request = require('co-request')
-const hashPassword = require('five-bells-shared/utils/hashPassword')
 const ledger = process.env.LEDGER
 const username = process.env.USERNAME
 const adminUser = process.env.ADMIN_USER
@@ -43,7 +42,7 @@ function * createAccount (ledger, name) {
     json: true,
     body: {
       name: name,
-      password_hash: (yield hashPassword(name)),
+      password: name,
       balance: '1500000'
     }
   })
