@@ -21,11 +21,11 @@
     "node": ">=4.0.0"
   },
   "dependencies": {
-    "five-bells-connector": "~2.3.0",
-    "five-bells-ledger": "~10.0.2",
-    "five-bells-notary": "~2.0.1",
-    "five-bells-sender": "~4.3.0",
-    "five-bells-visualization": "~2.4.0",
+    "five-bells-connector": "~4.1.1",
+    "five-bells-ledger": "~11.0.0",
+    "five-bells-notary": "~3.1.0",
+    "five-bells-sender": "~5.0.0",
+    "five-bells-visualization": "git+https://github.com/interledger/five-bells-visualization.git#task/update-deps",
     "co": "^4.6.0",
     "co-request": "^1.0.0",
     "lodash": "^3.10.1",
