@@ -10,10 +10,38 @@ const connectorNames = [
 ]
 
 const currencies = [
-  'AUD', 'BGN', 'BRL', 'CAD', 'CHF', 'CNY', 'CZK', 'DKK', 'EUR', 'GBP',
-  'HKD', 'HRK', 'HUF', 'IDR', 'ILS', 'INR', 'JPY', 'KRW', 'MXN', 'MYR',
-  'NOK', 'NZD', 'PHP', 'PLN', 'RON', 'RUB', 'SEK', 'SGD', 'THB', 'TRY',
-  'USD', 'ZAR'
+  { code: 'AUD', symbol: 'A$' },
+  { code: 'BGN', symbol: 'лв' },
+  { code: 'BRL', symbol: 'R$' },
+  { code: 'CAD', symbol: 'C$' },
+  { code: 'CHF', symbol: 'Fr.' },
+  { code: 'CNY', symbol: '¥' },
+  { code: 'CZK', symbol: 'Kč' },
+  { code: 'DKK', symbol: 'kr.' },
+  { code: 'EUR', symbol: '€' },
+  { code: 'GBP', symbol: '£' },
+  { code: 'HKD', symbol: 'HK$' },
+  { code: 'HRK', symbol: 'kn' },
+  { code: 'HUF', symbol: 'Ft' },
+  { code: 'IDR', symbol: 'Rp' },
+  { code: 'ILS', symbol: '₪' },
+  { code: 'INR', symbol: '₹' },
+  { code: 'JPY', symbol: '¥' },
+  { code: 'KRW', symbol: '₩' },
+  { code: 'MXN', symbol: 'Mex$' },
+  { code: 'MYR', symbol: 'RM' },
+  { code: 'NOK', symbol: 'kr' },
+  { code: 'NZD', symbol: 'NZ$' },
+  { code: 'PHP', symbol: '₱' },
+  { code: 'PLN', symbol: 'zł' },
+  { code: 'RON', symbol: 'lei' },
+  { code: 'RUB', symbol: '₽' },
+  { code: 'SEK', symbol: 'kr' },
+  { code: 'SGD', symbol: 'S$' },
+  { code: 'THB', symbol: '฿' },
+  { code: 'TRY', symbol: '₺' },
+  { code: 'USD', symbol: '$' },
+  { code: 'ZAR', symbol: 'R' }
 ]
 
 class Demo {
@@ -49,8 +77,8 @@ class Demo {
       this.connectorEdges[i] = []
     }
     this.graph.edges.forEach(function (edge, i) {
-      edge.source_currency = currencies[edge.source % currencies.length]
-      edge.target_currency = currencies[edge.target % currencies.length]
+      edge.source_currency = currencies[edge.source % currencies.length].code
+      edge.target_currency = currencies[edge.target % currencies.length].code
       edge.source = 'http://localhost:' + (3001 + edge.source)
       edge.target = 'http://localhost:' + (3001 + edge.target)
       _this.connectorEdges[i % _this.numConnectors].push(edge)
@@ -58,6 +86,7 @@ class Demo {
   }
 
   createLedger (name, port) {
+    const currency = currencies[Math.floor(Math.random() * currencies.length)]
     const dbUri = process.env.LEDGER_DB_URI || 'sqlite://' + path.resolve(__dirname, '../../data/' + name + '.sqlite')
     return {
       env: {
@@ -67,7 +96,9 @@ class Demo {
         LEDGER_HOSTNAME: 'localhost',
         LEDGER_PORT: port,
         LEDGER_ADMIN_USER: this.adminUser,
-        LEDGER_ADMIN_PASS: this.adminPass
+        LEDGER_ADMIN_PASS: this.adminPass,
+        LEDGER_CURRENCY_CODE: currency.code,
+        LEDGER_CURRENCY_SYMBOL: currency.symbol
       },
       cwd: './node_modules/five-bells-ledger',
       cmd: this.npmPrefix + ' start -- --color',
@@ -110,7 +141,8 @@ class Demo {
         CONNECTOR_HOSTNAME: 'localhost',
         CONNECTOR_PORT: port,
         CONNECTOR_ADMIN_USER: this.adminUser,
-        CONNECTOR_ADMIN_PASS: this.adminPass
+        CONNECTOR_ADMIN_PASS: this.adminPass,
+        CONNECTOR_QUOTE_FULL_PATH: true
       },
       cwd: './node_modules/five-bells-connector',
       cmd: this.npmPrefix + ' start -- --color',
