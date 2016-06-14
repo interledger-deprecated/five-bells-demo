@@ -141,8 +141,7 @@ class Demo {
         CONNECTOR_HOSTNAME: 'localhost',
         CONNECTOR_PORT: port,
         CONNECTOR_ADMIN_USER: this.adminUser,
-        CONNECTOR_ADMIN_PASS: this.adminPass,
-        CONNECTOR_QUOTE_FULL_PATH: true
+        CONNECTOR_ADMIN_PASS: this.adminPass
       },
       cwd: './node_modules/five-bells-connector',
       cmd: this.npmPrefix + ' start -- --color',
