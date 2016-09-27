@@ -2,4 +2,7 @@
 
 const demo = require('./src/services/demo')
 
-demo.start()
+demo.start().catch(function (err) {
+  console.error(err.stack)
+  process.exit(1)
+})
