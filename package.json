@@ -16,7 +16,7 @@
     "lint": "eslint .",
     "start": "rm -f data/*.sqlite ; node index.js"
   },
-  "license": "MIT",
+  "license": "Apache-2.0",
   "engines": {
     "node": ">=4.0.0"
   },
