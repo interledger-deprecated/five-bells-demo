@@ -32,7 +32,7 @@ npm install --only=prod --no-optional
 npm start
 ```
 
-Visit [`http://localhost:5001`](http://localhost:5001) to see it in action!
+Visit [`http://localhost:5000`](http://localhost:5000) to see it in action!
 
 ### Configuration
 
