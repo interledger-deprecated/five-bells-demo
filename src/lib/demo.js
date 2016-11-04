@@ -78,8 +78,10 @@ class Demo {
       this.barabasiAlbertConnectedCore,
       this.barabasiAlbertConnectionsPerNewNode)
     this.connectorEdges = new Array(this.numConnectors)
+    this.connectorNames = new Array(this.numConnectors)
     for (let i = 0; i < this.numConnectors; i++) {
       this.connectorEdges[i] = []
+      this.connectorNames[i] = connectorNames[i] || 'connector' + i
     }
     this.ledgerHosts = {}
     this.graph.edges.forEach(function (edge, i) {
@@ -105,8 +107,10 @@ class Demo {
     }
 
     for (let i = 0; i < this.numConnectors; i++) {
-      const connector = connectorNames[i] || 'connector' + i
-      yield this.startConnector(connector, 4000 + i, this.connectorEdges[i])
+      yield this.setupConnectorAccounts(this.connectorNames[i], this.connectorEdges[i])
+    }
+    for (let i = 0; i < this.numConnectors; i++) {
+      yield this.startConnector(this.connectorNames[i], this.connectorEdges[i])
     }
     yield this.services.startVisualization(5000)
   }
@@ -117,16 +121,19 @@ class Demo {
     yield this.services.updateAccount(ledger, 'bob', {balance: '1000'})
   }
 
-  * startConnector (connector, port, edges) {
-    for (const edge of edges) {
-      yield this.services.updateAccount(edge.source, connector, {balance: '1000'})
-      yield this.services.updateAccount(edge.target, connector, {balance: '1000'})
-    }
-    yield this.services.startConnector(port, {
+  * startConnector (connector, edges) {
+    yield this.services.startConnector(connector, {
       pairs: this.edgesToPairs(edges),
       credentials: this.edgesToCredentials(edges, connector),
       backend: 'fixerio'
     })
+  }
+
+  * setupConnectorAccounts (connector, edges) {
+    for (const edge of edges) {
+      yield this.services.updateAccount(edge.source, connector, {balance: '1000', connector: edge.source + connector})
+      yield this.services.updateAccount(edge.target, connector, {balance: '1000', connector: edge.target + connector})
+    }
   }
 
   edgesToPairs (edges) {
@@ -147,17 +154,21 @@ class Demo {
   edgesToCredentials (edges, connectorName) {
     const creds = {}
     for (const edge of edges) {
-      creds[edge.source] = this.makeCredentials(edge.source, connectorName)
-      creds[edge.target] = this.makeCredentials(edge.target, connectorName)
+      creds[edge.source] = this.makeCredentials(edge.source, edge.source_currency, connectorName)
+      creds[edge.target] = this.makeCredentials(edge.target, edge.target_currency, connectorName)
     }
     return creds
   }
 
-  makeCredentials (ledger, name) {
+  makeCredentials (ledger, currency, name) {
     return {
-      account: this.ledgerHosts[ledger] + '/accounts/' + encodeURIComponent(name),
-      username: name,
-      password: name
+      currency: currency,
+      plugin: 'ilp-plugin-bells',
+      options: {
+        account: this.ledgerHosts[ledger] + '/accounts/' + encodeURIComponent(name),
+        username: name,
+        password: name
+      }
     }
   }
 }
