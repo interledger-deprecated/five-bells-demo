@@ -16,7 +16,7 @@ In order to try the Five Bells Demo, you need to make sure you have the followin
 ### Step 1: Clone demo
 
 ``` sh
-git clone https://github.com/interledger/five-bells-demo.git
+git clone https://github.com/interledgerjs/five-bells-demo.git
 cd five-bells-demo
 ```
 
@@ -32,12 +32,12 @@ npm install --only=prod --no-optional
 npm start
 ```
 
-Visit [`http://localhost:5001`](http://localhost:5001) to see it in action!
+Visit [`http://localhost:5000`](http://localhost:5000) to see it in action!
 
 ### Configuration
 
-* `DEMO_NUM_LEDGERS` - Number of [`five-bells-ledger`](https://github.com/interledger/five-bells-ledger) processes to start
-* `DEMO_NUM_CONNECTORS` - Number of [`five-bells-connector`](https://github.com/interledger/five-bells-connector) processes to start
+* `DEMO_NUM_LEDGERS` - Number of [`five-bells-ledger`](https://github.com/interledgerjs/five-bells-ledger) processes to start
+* `DEMO_NUM_CONNECTORS` - Number of [`five-bells-connector`](https://github.com/interledgerjs/five-bells-connector) processes to start
 * `DEMO_CONNECTED_CORE` - How connected the core ledgers in the generated graph should be (default: 2)
 * `DEMO_CONNECTIONS_PER_NEW_NODE` - How many connections each ledger will be added with (default: 2, must be <= `DEMO_CONNECTED_CORE`)
 
@@ -55,8 +55,8 @@ In the early 1800s, the group of clerks outgrew their space at the Five Bells an
 
 This demo uses the following modules:
 
-* [`five-bells-connector`](https://github.com/interledger/five-bells-connector)
-* [`five-bells-ledger`](https://github.com/interledger/five-bells-ledger)
-* [`five-bells-sender`](https://github.com/interledger/five-bells-sender)
-* [`five-bells-visualization`](https://github.com/interledger/five-bells-visualization)
+* [`five-bells-connector`](https://github.com/interledgerjs/five-bells-connector)
+* [`five-bells-ledger`](https://github.com/interledgerjs/five-bells-ledger)
+* [`five-bells-sender`](https://github.com/interledgerjs/five-bells-sender)
+* [`five-bells-visualization`](https://github.com/interledgerjs/five-bells-visualization)
 
