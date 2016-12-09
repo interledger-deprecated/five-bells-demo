@@ -84,6 +84,9 @@ class Demo {
       this.connectorNames[i] = connectorNames[i] || 'connector' + i
     }
     this.ledgerHosts = {}
+    // Connector usernames per ledger
+    // { ledgerPrefix → [ connectorIndex ] }
+    this.ledgerConnectors = {}
     this.graph.edges.forEach(function (edge, i) {
       const source = edge.source
       const target = edge.target
@@ -94,6 +97,14 @@ class Demo {
       this.ledgerHosts[edge.source] = 'http://localhost:' + (3000 + source)
       this.ledgerHosts[edge.target] = 'http://localhost:' + (3000 + target)
       _this.connectorEdges[i % _this.numConnectors].push(edge)
+      if (!this.ledgerConnectors[edge.source]) {
+        this.ledgerConnectors[edge.source] = []
+      }
+      this.ledgerConnectors[edge.source].push(this.connectorNames[i % _this.numConnectors])
+      if (!this.ledgerConnectors[edge.target]) {
+        this.ledgerConnectors[edge.target] = []
+      }
+      this.ledgerConnectors[edge.target].push(this.connectorNames[i % _this.numConnectors])
     }, this)
   }
 
@@ -112,11 +123,14 @@ class Demo {
     for (let i = 0; i < this.numConnectors; i++) {
       yield this.startConnector(this.connectorNames[i], this.connectorEdges[i])
     }
+
     yield this.services.startVisualization(5000)
   }
 
   * startLedger (ledger, port) {
-    yield this.services.startLedger(ledger, port, {})
+    yield this.services.startLedger(ledger, port, {
+      recommendedConnectors: this.ledgerConnectors[ledger]
+    })
     yield this.services.updateAccount(ledger, 'alice', {balance: '1000'})
     yield this.services.updateAccount(ledger, 'bob', {balance: '1000'})
   }
