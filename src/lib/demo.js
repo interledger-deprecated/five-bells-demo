@@ -2,6 +2,11 @@
 
 const co = require('co')
 const path = require('path')
+if (process.env.SEED_FOR_REPEATABILITY) {
+  const seedrandom = require('seedrandom')
+  // replace Math.random:
+  seedrandom(process.env.SEED_FOR_REPEATABILITY, { global: true })
+}
 const randomgraph = require('randomgraph')
 const ServiceManager = require('five-bells-service-manager')
 
