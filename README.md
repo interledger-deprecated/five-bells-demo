@@ -4,6 +4,8 @@
 >
 > Please note that this reference code is intended for TESTING USE ONLY. Do not use with real funds.
 
+![Screen recording of the demo in action](docs/assets/screencast.gif)
+
 ## Running the Demo
 
 ### Prerequisites
@@ -32,7 +34,11 @@ npm install --only=prod --no-optional
 npm start
 ```
 
-Visit [`http://localhost:5000`](http://localhost:5000) to see it in action!
+Visit [`http://localhost:5000`](http://localhost:5000) to see it in action! It should look something like this:
+
+![Demo Screenshot showing circles representing ledgers connected by lines between them representing connectors](docs/assets/screenshot.png)
+
+When you click a ledger and then click another ledger, you'll see a transaction executing.
 
 ### Configuration
 
@@ -41,21 +47,26 @@ Visit [`http://localhost:5000`](http://localhost:5000) to see it in action!
 * `DEMO_CONNECTED_CORE` - How connected the core ledgers in the generated graph should be (default: 2)
 * `DEMO_CONNECTIONS_PER_NEW_NODE` - How many connections each ledger will be added with (default: 2, must be <= `DEMO_CONNECTED_CORE`)
 
-## Why "Five Bells"?
+### Warnings
 
-Legend (i.e. [Wikipedia](https://en.wikipedia.org/wiki/Bankers_clearing_house)) has it that before 1770, checks/cheques were cleared by clerks running between banks exchanging checks for cash.
-
-![Cheque from 1659](./cheque.jpg)
-
-One day, two of the clerks from London banks recognized one another in the Five Bells Tavern on Lombard Street. The clerks started meeting daily at the Five Bells to clear checks, determine the banks' net positions and settle the remaining balances.
-
-In the early 1800s, the group of clerks outgrew their space at the Five Bells and moved across the street to a dedicated building where check clearing would take place until the early 2000s.
+When running the demo you will get a few warnings because components start up one by one and are trying to find each other.
 
 ## Components
 
 This demo uses the following modules:
 
-* [`five-bells-connector`](https://github.com/interledgerjs/five-bells-connector)
-* [`five-bells-ledger`](https://github.com/interledgerjs/five-bells-ledger)
-* [`five-bells-sender`](https://github.com/interledgerjs/five-bells-sender)
-* [`five-bells-visualization`](https://github.com/interledgerjs/five-bells-visualization)
+* [`five-bells-ledger`](https://github.com/interledgerjs/five-bells-ledger): Used as a ledger
+* [`ilp-connector`](https://github.com/interledgerjs/five-bells-connector): Used for routing payments across ledgers
+* [`ilp`](https://github.com/interledgerjs/ilp): Used as a sender and receiver component
+* [`ilp-plugin-bells`](https://github.com/interledgerjs/ilp-plugin-bells): Plugin for talking to five-bells-ledger
+* [`five-bells-visualization`](https://github.com/interledgerjs/five-bells-visualization): UI component to visualize what is happening
+
+## Why "Five Bells"?
+
+Legend (i.e. [Wikipedia](https://en.wikipedia.org/wiki/Bankers_clearing_house)) has it that before 1770, checks/cheques were cleared by clerks running between banks exchanging checks for cash.
+
+![Cheque from 1659](docs/assets/cheque.jpg)
+
+One day, two of the clerks from London banks recognized one another in the Five Bells Tavern on Lombard Street. The clerks started meeting daily at the Five Bells to clear checks, determine the banks' net positions and settle the remaining balances.
+
+In the early 1800s, the group of clerks outgrew their space at the Five Bells and moved across the street to a dedicated building where check clearing would take place until the early 2000s.
