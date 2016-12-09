@@ -11,7 +11,7 @@
 In order to try the Five Bells Demo, you need to make sure you have the following:
 
 * [Git](https://git-scm.com/)
-* [Node.js](https://nodejs.org) (Version 4.x.x or higher)
+* [Node.js](https://nodejs.org) (Version 6.x.x recommended)
 
 ### Step 1: Clone demo
 
@@ -59,4 +59,3 @@ This demo uses the following modules:
 * [`five-bells-ledger`](https://github.com/interledgerjs/five-bells-ledger)
 * [`five-bells-sender`](https://github.com/interledgerjs/five-bells-sender)
 * [`five-bells-visualization`](https://github.com/interledgerjs/five-bells-visualization)
-
