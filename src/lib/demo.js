@@ -131,8 +131,8 @@ class Demo {
     yield this.services.startLedger(ledger, port, {
       recommendedConnectors: this.ledgerConnectors[ledger]
     })
-    yield this.services.updateAccount(ledger, 'alice', {balance: '1000'})
-    yield this.services.updateAccount(ledger, 'bob', {balance: '1000'})
+    yield this.services.updateAccount(ledger, 'alice', {balance: '1000000000'})
+    yield this.services.updateAccount(ledger, 'bob', {balance: '1000000000'})
   }
 
   * startConnector (connector, edges) {
@@ -145,8 +145,8 @@ class Demo {
 
   * setupConnectorAccounts (connector, edges) {
     for (const edge of edges) {
-      yield this.services.updateAccount(edge.source, connector, {balance: '1000', connector: edge.source + connector})
-      yield this.services.updateAccount(edge.target, connector, {balance: '1000', connector: edge.target + connector})
+      yield this.services.updateAccount(edge.source, connector, {balance: '1000000000', connector: edge.source + connector})
+      yield this.services.updateAccount(edge.target, connector, {balance: '1000000000', connector: edge.target + connector})
     }
   }
 
