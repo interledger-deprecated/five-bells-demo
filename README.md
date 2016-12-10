@@ -40,6 +40,18 @@ Visit [`http://localhost:5000`](http://localhost:5000) to see it in action! It s
 
 When you click a ledger and then click another ledger, you'll see a transaction executing.
 
+### What am I looking at?
+
+[Interledger Protocol (ILP)](https://interledger.org) is a protocol for making payments across different ledgers. This demo will create a bunch of ledgers (each one running in a separate Node.js process) on your local machine and then generate connect them using a bunch of randomly generated connectors. The connectors will use ILP routing to discover each other.
+
+The demo also creates test sender accounts ("alice") and test receiver accounts ("bob") on each ledger. When you click two ledgers, an ILP sender will be created, which authenticates as Alice on the first ledger. This sender will then send to "Bob" on the second ledger you clicked.
+
+When sending a payment on Interledger, the sender will first query the receiver using the SPSP protocol to determine the properties of the receiver and what types of payments are possible. They will then request an Interactive Payment Request (IPR) which describes the payment they are about to do. Next, they will ask their connector (think: router) for a quote. The connector may recurse and ask other connectors. Finally, the connector will return a description of a local transfer. This is a local transfer of funds from the sender to the connector on the sender's ledger. All of this happens invisibly within a split second. However, you can see most of these steps in the (fairly verbose) log of the demo.
+
+If the sender is happy with the quoted rate (and the demo sender is always happy), she simply prepares the described local transfer. This means that her money is now on hold and the connector is notified. The connector then prepares a transfer (puts money on hold) on the next ledger and so on. This is shown in the demo by an orange bubble with the text "prepared" hovering over each ledger. When this chain reaches the recipient, they produce a receipt which triggers the execution in reverse order. This is shown in the demo by a green bubble with the text "executed" hovering over each ledger.
+
+When an error occurs, transfers may be rolled back after a timeout. This is shown in the demo by a red bubble with the text "rejected" hovering over each ledger.
+
 ### Configuration
 
 * `DEMO_NUM_LEDGERS` - Number of [`five-bells-ledger`](https://github.com/interledgerjs/five-bells-ledger) processes to start
