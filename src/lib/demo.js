@@ -1,5 +1,7 @@
 'use strict'
 
+const debug = require('debug')('five-bells-demo')
+const _ = require('lodash')
 const co = require('co')
 const path = require('path')
 if (process.env.SEED_FOR_REPEATABILITY) {
@@ -61,56 +63,99 @@ class Demo {
     this.adminUser = opts.adminUser
     this.adminPass = opts.adminPass
 
-    this.numLedgers = opts.numLedgers
-    this.numConnectors = opts.numConnectors
-    this.barabasiAlbertConnectedCore = opts.barabasiAlbertConnectedCore || 2
-    this.barabasiAlbertConnectionsPerNewNode = opts.barabasiAlbertConnectionsPerNewNode || 2
-
     if (process.env.npm_node_execpath && process.env.npm_execpath) {
       this.npmPrefix = process.env.npm_node_execpath + ' ' + process.env.npm_execpath
     } else {
       this.npmPrefix = 'npm'
     }
 
-    // Connector graph
-    // Barabási–Albert (N, m0, M)
-    //
-    // N .. number of nodes
-    // m0 .. size of connected core (m0 <= N)
-    // M .. (M <= m0)
-    this.graph = randomgraph.BarabasiAlbert(
-      this.numLedgers,
-      this.barabasiAlbertConnectedCore,
-      this.barabasiAlbertConnectionsPerNewNode)
-    this.connectorEdges = new Array(this.numConnectors)
-    this.connectorNames = new Array(this.numConnectors)
-    for (let i = 0; i < this.numConnectors; i++) {
-      this.connectorEdges[i] = []
-      this.connectorNames[i] = connectorNames[i] || 'connector' + i
+    if (process.env.FIVE_BELLS_DEMO_GRAPH) { // explicitly defined graph available
+      debug('FIVE_BELLS_DEMO_GRAPH:',process.env.FIVE_BELLS_DEMO_GRAPH)
+      const graphConf = require(process.env.FIVE_BELLS_DEMO_GRAPH)
+      debug('graphConf:',JSON.stringify(graphConf))
+      // this.connectorNames = graphConf.edge_list_map.keys() // wtf is wrong with this?
+      this.connectorNames = _.keys(graphConf.edge_list_map)
+      debug('connectorNames:',this.connectorNames)
+      this.numConnectors = this.connectorNames.length
+      this.numLedgers = graphConf.num_ledgers
+      this.ledgerHosts = {}
+      this.ledgerConnectors = {}
+      this.connectorEdges = new Array(this.numConnectors)
+      for (let i = 0; i < this.numConnectors; i++) {
+        const edges = graphConf.edge_list_map[this.connectorNames[i]]
+        debug('edges:',edges)
+        this.connectorEdges[i] =
+          edges.map((edge) => {
+            debug('edge:',edge,'source type?:',typeof edge.source)
+            const source = edge.source
+            const target = edge.target
+            const sourceAddress = 'demo.ledger' + source + '.'
+            const targetAddress = 'demo.ledger' + target + '.'
+            this.ledgerHosts[sourceAddress] = 'http://localhost:' + (3000 + source)
+            this.ledgerHosts[targetAddress] = 'http://localhost:' + (3000 + target)
+            if (!this.ledgerConnectors[sourceAddress]) this.ledgerConnectors[sourceAddress] = []
+            this.ledgerConnectors[sourceAddress].push(this.connectorNames[i])
+            if (!this.ledgerConnectors[targetAddress]) this.ledgerConnectors[targetAddress] = []
+            this.ledgerConnectors[targetAddress].push(this.connectorNames[i])
+            return {source: sourceAddress,
+                    target: targetAddress,
+                    // todo? support configured or random currencies?
+                    source_currency: currencies[0].code,
+                    target_currency: currencies[0].code}
+          })
+      }
+      debug('numLedgers:', this.numLedgers, ' connectorEdges:',JSON.stringify(this.connectorEdges))
+    } else { // original random method
+
+      this.numLedgers = opts.numLedgers
+      this.numConnectors = opts.numConnectors
+      this.barabasiAlbertConnectedCore = opts.barabasiAlbertConnectedCore || 2
+      this.barabasiAlbertConnectionsPerNewNode = opts.barabasiAlbertConnectionsPerNewNode || 2
+
+      // Connector graph
+      // Barabási–Albert (N, m0, M)
+      //
+      // N .. number of nodes
+      // m0 .. size of connected core (m0 <= N)
+      // M .. (M <= m0)
+      this.graph = randomgraph.BarabasiAlbert(
+        this.numLedgers,
+        this.barabasiAlbertConnectedCore,
+        this.barabasiAlbertConnectionsPerNewNode)
+
+      this.connectorNames = new Array(this.numConnectors)
+
+      debug('graph:',JSON.stringify(this.graph))
+
+      this.connectorEdges = new Array(this.numConnectors)
+      for (let i = 0; i < this.numConnectors; i++) {
+        this.connectorEdges[i] = []
+        this.connectorNames[i] = connectorNames[i] || 'connector' + i
+      }
+      this.ledgerHosts = {}
+      // Connector usernames per ledger
+      // { ledgerPrefix → [ connectorIndex ] }
+      this.ledgerConnectors = {}
+      this.graph.edges.forEach(function (edge, i) {
+        const source = edge.source
+        const target = edge.target
+        edge.source_currency = currencies[source % currencies.length].code
+        edge.target_currency = currencies[target % currencies.length].code
+        edge.source = 'demo.ledger' + source + '.'
+        edge.target = 'demo.ledger' + target + '.'
+        this.ledgerHosts[edge.source] = 'http://localhost:' + (3000 + source)
+        this.ledgerHosts[edge.target] = 'http://localhost:' + (3000 + target)
+        _this.connectorEdges[i % _this.numConnectors].push(edge)
+        if (!this.ledgerConnectors[edge.source]) {
+          this.ledgerConnectors[edge.source] = []
+        }
+        this.ledgerConnectors[edge.source].push(this.connectorNames[i % _this.numConnectors])
+        if (!this.ledgerConnectors[edge.target]) {
+          this.ledgerConnectors[edge.target] = []
+        }
+        this.ledgerConnectors[edge.target].push(this.connectorNames[i % _this.numConnectors])
+      }, this)
     }
-    this.ledgerHosts = {}
-    // Connector usernames per ledger
-    // { ledgerPrefix → [ connectorIndex ] }
-    this.ledgerConnectors = {}
-    this.graph.edges.forEach(function (edge, i) {
-      const source = edge.source
-      const target = edge.target
-      edge.source_currency = currencies[source % currencies.length].code
-      edge.target_currency = currencies[target % currencies.length].code
-      edge.source = 'demo.ledger' + source + '.'
-      edge.target = 'demo.ledger' + target + '.'
-      this.ledgerHosts[edge.source] = 'http://localhost:' + (3000 + source)
-      this.ledgerHosts[edge.target] = 'http://localhost:' + (3000 + target)
-      _this.connectorEdges[i % _this.numConnectors].push(edge)
-      if (!this.ledgerConnectors[edge.source]) {
-        this.ledgerConnectors[edge.source] = []
-      }
-      this.ledgerConnectors[edge.source].push(this.connectorNames[i % _this.numConnectors])
-      if (!this.ledgerConnectors[edge.target]) {
-        this.ledgerConnectors[edge.target] = []
-      }
-      this.ledgerConnectors[edge.target].push(this.connectorNames[i % _this.numConnectors])
-    }, this)
   }
 
   start () {
@@ -149,6 +194,7 @@ class Demo {
   }
 
   * setupConnectorAccounts (connector, edges) {
+    debug('setupConnectorAccounts connector:',connector, 'edges:', JSON.stringify(edges))
     for (const edge of edges) {
       yield this.services.updateAccount(edge.source, connector, {balance: '1000000000', connector: edge.source + connector})
       yield this.services.updateAccount(edge.target, connector, {balance: '1000000000', connector: edge.target + connector})
@@ -180,6 +226,8 @@ class Demo {
   }
 
   makeCredentials (ledger, currency, name) {
+    debug('makeCredentials ledger:',ledger,'account:',this.ledgerHosts[ledger] + '/accounts/' + encodeURIComponent(name))
+    debug('makeCredentials ledgerHosts:',this.ledgerHosts, '[1]:', this.ledgerHosts[1])
     return {
       currency: currency,
       plugin: 'ilp-plugin-bells',
