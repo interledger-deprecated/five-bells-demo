@@ -63,6 +63,9 @@ class Demo {
     this.adminUser = opts.adminUser
     this.adminPass = opts.adminPass
 
+    this.integrationTestUri = opts.integrationTestUri || process.env.INTEGRATION_TEST_URI
+    debug('integrationTestUri:',this.integrationTestUri)
+
     if (process.env.npm_node_execpath && process.env.npm_execpath) {
       this.npmPrefix = process.env.npm_node_execpath + ' ' + process.env.npm_execpath
     } else {
@@ -171,7 +174,7 @@ class Demo {
       yield this.setupConnectorAccounts(this.connectorNames[i], this.connectorEdges[i])
     }
     for (let i = 0; i < this.numConnectors; i++) {
-      yield this.startConnector(this.connectorNames[i], this.connectorEdges[i])
+      yield this.startConnector(this.connectorNames[i], this.connectorEdges[i], i)
     }
 
     yield this.services.startVisualization(5000)
@@ -185,12 +188,16 @@ class Demo {
     yield this.services.updateAccount(ledger, 'bob', {balance: '1000000000'})
   }
 
-  * startConnector (connector, edges) {
-    yield this.services.startConnector(connector, {
-      pairs: this.edgesToPairs(edges),
-      credentials: this.edgesToCredentials(edges, connector),
-      backend: 'fixerio'
-    })
+  * startConnector (connector, edges, i) {
+    let integrationTestOpts = this.integrationTestUri &&
+          {integrationTestUri: this.integrationTestUri,
+           integrationTestName: connector,
+           integrationTestPort: (4200+i)} || {}
+    yield this.services.startConnector(connector, _.merge(
+      {pairs: this.edgesToPairs(edges),
+       credentials: this.edgesToCredentials(edges, connector),
+       backend: 'fixerio'
+      }, integrationTestOpts))
   }
 
   * setupConnectorAccounts (connector, edges) {
