@@ -10,6 +10,7 @@ if (process.env.SEED_FOR_REPEATABILITY) {
   seedrandom(process.env.SEED_FOR_REPEATABILITY, { global: true })
 }
 const randomgraph = require('randomgraph')
+const fetch = require('node-fetch')
 const ServiceManager = require('five-bells-service-manager')
 
 const connectorNames = [
@@ -157,6 +158,7 @@ class Demo {
           this.ledgerConnectors[edge.target] = []
         }
         this.ledgerConnectors[edge.target].push(this.connectorNames[i % _this.numConnectors])
+        console.log('graph edge '+source+'->'+target+' assigned to:',this.connectorNames[i % _this.numConnectors])
       }, this)
     }
   }
@@ -176,6 +178,7 @@ class Demo {
     for (let i = 0; i < this.numConnectors; i++) {
       yield this.startConnector(this.connectorNames[i], this.connectorEdges[i], i)
     }
+    if (this.integrationTestUri) this.reportToIntegrationTestUri()
 
     yield this.services.startVisualization(5000)
   }
@@ -244,6 +247,38 @@ class Demo {
         password: name
       }
     }
+  }
+
+  reportToIntegrationTestUri () {
+    function ledgerNumber (ledgerName) {
+      const re = /^demo\.ledger([0-9]+)\.$/
+      const result = ledgerName.match(re)
+      return Number(result[1])
+    }
+    const connectorNames = this.connectorNames
+    const connectorEdges = this.connectorEdges
+    const numLedgers = this.numLedgers
+    let edgeListMap = {}
+    for (let i = 0; i < connectorNames.length; i++) {
+      edgeListMap[connectorNames[i]] = connectorEdges[i].map((e) => {
+        return { source: ledgerNumber(e.source),
+                 target: ledgerNumber(e.target) }
+      })
+    }
+    const uri = this.integrationTestUri
+    co(function * () {
+      const body =
+        { name: 'five-bells-demo',
+          message: 'demo_started',
+          config:
+          { num_ledgers: numLedgers,
+            edge_list_map: edgeListMap } }
+      debug('reportToIntegrationTestUri uri:', uri, ' body:', body)
+      const res = yield fetch(uri, { method: 'POST', body: JSON.stringify(body) })
+      debug('reportToIntegrationTestUri res:', res)
+      const text = yield res.text()
+      debug('reportToIntegrationTestUri res.text:', text)
+    })//.catch((err) => log.error(err))
   }
 }
 
